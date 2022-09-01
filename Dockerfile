@@ -37,7 +37,8 @@ RUN sed -i '/SSLCertificateKeyFile.*snakeoil\.key/cSSLCertificateKeyFile /etc/ss
 RUN a2ensite default-ssl \
  && sed -i 's!/var/www/html!/var/www/public!g' /etc/apache2/sites-available/000-default.conf \
  && mv /var/www/html /var/www/public \
- && echo "AllowEncodedSlashes On" >> /etc/apache2/apache2.conf
+ && echo "AllowEncodedSlashes On" >> /etc/apache2/apache2.conf \
+ && echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
 COPY --from=get-composer /usr/bin/composer /usr/local/bin/composer
 
