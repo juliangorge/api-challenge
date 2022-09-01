@@ -26,14 +26,20 @@ FROM php:8.0-apache
 
 RUN apt-get update \
  && apt-get install -y git libzip-dev libicu-dev \
- && docker-php-ext-install zip \
+ && docker-php-ext-install zip pdo pdo_mysql \
  && docker-php-ext-configure intl \
  && docker-php-ext-install intl \
- && a2enmod rewrite \
+ && a2enmod rewrite && a2enmod ssl && a2enmod socache_shmcb
+
+RUN sed -i '/SSLCertificateFile.*snakeoil\.pem/c\SSLCertificateFile \/etc\/ssl\/certs\/mycert.crt' /etc/apache2/sites-available/default-ssl.conf
+RUN sed -i '/SSLCertificateKeyFile.*snakeoil\.key/cSSLCertificateKeyFile /etc/ssl/private/mycert.key\' /etc/apache2/sites-available/default-ssl.conf
+
+RUN a2ensite default-ssl \
  && sed -i 's!/var/www/html!/var/www/public!g' /etc/apache2/sites-available/000-default.conf \
  && mv /var/www/html /var/www/public \
  && echo "AllowEncodedSlashes On" >> /etc/apache2/apache2.conf
 
 COPY --from=get-composer /usr/bin/composer /usr/local/bin/composer
 
+EXPOSE 3306
 WORKDIR /var/www

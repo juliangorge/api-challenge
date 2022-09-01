@@ -11,35 +11,26 @@ return [
                     ],
                 ],
             ],
-            'reports-api.rpc.export' => [
-                'type' => 'Segment',
-                'options' => [
-                    'route' => '/export',
-                    'defaults' => [
-                        'controller' => 'ReportsAPI\\V1\\Rpc\\Export\\Controller',
-                        'action' => 'export',
-                    ],
-                ],
-            ],
         ],
     ],
     'api-tools-versioning' => [
         'uri' => [
             0 => 'reports-api.rest.reports',
-            1 => 'reports-api.rpc.export',
         ],
     ],
     'api-tools-rest' => [
         'ReportsAPI\\V1\\Rest\\Reports\\Controller' => [
-            'listener' => 'ReportsAPI\\V1\\Rest\\Reports\\ReportsResource',
+            'listener' => \ReportsAPI\V1\Rest\Reports\ReportsResource::class,
             'route_name' => 'reports-api.rest.reports',
             'route_identifier_name' => 'report_id',
             'collection_name' => 'reports',
             'entity_http_methods' => [
                 0 => 'POST',
+                1 => 'GET',
             ],
             'collection_http_methods' => [
                 0 => 'POST',
+                1 => 'GET',
             ],
             'collection_query_whitelist' => [],
             'page_size' => 25,
@@ -52,25 +43,15 @@ return [
     'api-tools-content-negotiation' => [
         'controllers' => [
             'ReportsAPI\\V1\\Rest\\Reports\\Controller' => 'Json',
-            'ReportsAPI\\V1\\Rpc\\Export\\Controller' => 'Json',
         ],
         'accept_whitelist' => [
             'ReportsAPI\\V1\\Rest\\Reports\\Controller' => [
                 0 => 'application/json',
             ],
-            'ReportsAPI\\V1\\Rpc\\Export\\Controller' => [
-                0 => 'application/vnd.reports-api.v1+json',
-                1 => 'application/json',
-                2 => 'application/*+json',
-            ],
         ],
         'content_type_whitelist' => [
             'ReportsAPI\\V1\\Rest\\Reports\\Controller' => [
                 0 => 'application/json',
-            ],
-            'ReportsAPI\\V1\\Rpc\\Export\\Controller' => [
-                0 => 'application/vnd.reports-api.v1+json',
-                1 => 'application/json',
             ],
         ],
     ],
@@ -92,7 +73,7 @@ return [
     ],
     'api-tools' => [
         'db-connected' => [
-            'ReportsAPI\\V1\\Rest\\Reports\\ReportsResource' => [
+            \ReportsAPI\V1\Rest\Reports\ReportsResource::class => [
                 'adapter_name' => 'db_adapter',
                 'table_name' => 'reports',
                 'hydrator_name' => \Laminas\Hydrator\ArraySerializableHydrator::class,
@@ -226,48 +207,30 @@ return [
         'authorization' => [
             'ReportsAPI\\V1\\Rest\\Reports\\Controller' => [
                 'collection' => [
-                    'GET' => false,
+                    'GET' => true,
                     'POST' => true,
                     'PUT' => false,
                     'PATCH' => false,
                     'DELETE' => false,
                 ],
                 'entity' => [
-                    'GET' => false,
+                    'GET' => true,
                     'POST' => true,
                     'PUT' => false,
                     'PATCH' => false,
                     'DELETE' => false,
                 ],
             ],
-            'ReportsAPI\\V1\\Rpc\\Export\\Controller' => [
-                'actions' => [
-                    'export' => [
-                        'GET' => true,
-                        'POST' => false,
-                        'PUT' => false,
-                        'PATCH' => false,
-                        'DELETE' => false,
-                    ],
-                ],
-            ],
         ],
     ],
     'service_manager' => [
-        'factories' => [],
+        'factories' => [
+            \ReportsAPI\V1\Rest\Reports\ReportsResource::class => \ReportsAPI\V1\Rest\Reports\ReportsResourceFactory::class,
+            \ReportsAPI\V1\Rest\Reports\ReportsTableGateway::class => \ReportsAPI\V1\Rest\Reports\ReportsTableGatewayFactory::class,
+        ],
     ],
     'controllers' => [
-        'factories' => [
-            'ReportsAPI\\V1\\Rpc\\Export\\Controller' => \ReportsAPI\V1\Rpc\Export\ExportControllerFactory::class,
-        ],
+        'factories' => [],
     ],
-    'api-tools-rpc' => [
-        'ReportsAPI\\V1\\Rpc\\Export\\Controller' => [
-            'service_name' => 'export',
-            'http_methods' => [
-                0 => 'GET',
-            ],
-            'route_name' => 'reports-api.rpc.export',
-        ],
-    ],
+    'api-tools-rpc' => [],
 ];
