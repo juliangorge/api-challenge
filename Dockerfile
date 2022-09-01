@@ -36,7 +36,6 @@ RUN sed -i '/SSLCertificateKeyFile.*snakeoil\.key/cSSLCertificateKeyFile /etc/ss
 
 RUN a2ensite default-ssl \
  && sed -i 's!/var/www/html!/var/www/public!g' /etc/apache2/sites-available/000-default.conf \
- && sed -i 's!/var/www/html!/var/www/public!g' /etc/apache2/sites-available/default-ssl.conf \
  && mv /var/www/html /var/www/public \
  && echo "AllowEncodedSlashes On" >> /etc/apache2/apache2.conf \
  && echo "ServerName mp.juliangorge.com.ar" >> /etc/apache2/apache2.conf
