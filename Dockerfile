@@ -42,5 +42,7 @@ RUN a2ensite default-ssl \
 
 COPY --from=get-composer /usr/bin/composer /usr/local/bin/composer
 
-EXPOSE 3306
+RUN composer install
+
+#EXPOSE 3306
 WORKDIR /var/www
