@@ -44,5 +44,3 @@ COPY --from=get-composer /usr/bin/composer /usr/local/bin/composer
 
 #EXPOSE 3306
 WORKDIR /var/www
-
-RUN composer install
