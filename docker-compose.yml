@@ -11,8 +11,8 @@ services:
     - database
     volumes:
      - .:/var/www
-     - ./mycert.crt:/etc/ssl/certs/mycert.crt
-     - ./mycert.key:/etc/ssl/private/mycert.key
+     - ./fullchain.pem:/etc/ssl/certs/fullchain.pem
+     - ./privkey.pem:/etc/ssl/private/privkey.pem
   database:
     image: mysql
     ports:
