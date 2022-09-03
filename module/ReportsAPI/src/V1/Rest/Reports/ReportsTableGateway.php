@@ -15,10 +15,8 @@ class ReportsTableGateway extends TableGateway
 
         foreach($array as $value)
         {
-            $secondKey = $value['created_at']->format('Y-m-d');
-            //También podría ser un array multidimensional
-            //$sortedArray[$value[$sortByFirstKey]][$secondKey][] = $value;
-            $sortedArray[$value[$sortByFirstKey . '_' . $secondKey]][] = $value;
+            $secondKey = new \DateTime($value['created_at']);
+            $sortedArray[$value[$sortByFirstKey]][$secondKey->format('Y-m-d')][] = $value;
         }
 
         return $sortedArray;
@@ -28,17 +26,29 @@ class ReportsTableGateway extends TableGateway
     {
         $sortedArray = $this->sortArray($array, 'ip_address');
 
-        foreach($sortedArray as $keyByIpAndDate => $valuesByIpAndDate)
+        echo '<pre>' , print_r($sortedArray) , '</pre>';
+        die;
+
+        foreach($sortedArray as $keyByIp => $valuesByIp)
         {
 
-            $file = fopen($this->jsonLocation . $keyByIpAndDate . '.json', 'w');
-
-            foreach($valuesByIpAndDate as $value)
+            foreach($sortedArray as $keyByDate => $valuesByDate)
             {
-                fputs($file, json_encode($value));
-            }
 
-            fclose($file);
+                /*$file = fopen($this->jsonLocation . $keyByIp . '_' . $keyByDate . '.json', 'w');
+
+                foreach($valuesByDate as $value)
+                {
+                    fputs($file, json_encode($value));
+                }
+
+                fclose($file);*/
+
+                var_dump($keyByDate);
+                var_dump($valuesByDate);
+                die;
+
+            }
         }
         
     }
