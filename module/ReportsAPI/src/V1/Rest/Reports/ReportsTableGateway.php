@@ -7,7 +7,7 @@ use Laminas\Paginator\Adapter\DbSelect;
 class ReportsTableGateway extends TableGateway
 {
 
-    private $plainTextLocation = './public/data/';
+    private $jsonLocation = './public/data/';
 
     private function sortArray(array $array, string $sortByKey)
     {
@@ -21,13 +21,13 @@ class ReportsTableGateway extends TableGateway
         return $sortedArray;
     }
 
-    private function generatePlainTextFiles(array $array = [])
+    private function generateJsonFiles(array $array = [])
     {
         $sortedArray = $this->sortArray($array, 'ip_address');
 
         foreach($sortedArray as $keyByIp=> $valuesByIp)
         {
-            $file = fopen($this->plainTextLocation . $keyByIp . '_' . date('Y-m-d') . '.txt', 'w');
+            $file = fopen($this->jsonLocation . $keyByIp . '_' . date('Y-m-d') . '.json', 'w');
 
             foreach($valuesByIp as $value)
             {
@@ -62,7 +62,7 @@ class ReportsTableGateway extends TableGateway
             ]);
 
         $resultSet = $this->selectWith($select);
-        $this->generatePlainTextFiles($resultSet->toArray());
+        $this->generateJsonFiles($resultSet->toArray());
 
         return new DbSelect($select, $this->getAdapter(), $this->getResultSetPrototype());
     }
