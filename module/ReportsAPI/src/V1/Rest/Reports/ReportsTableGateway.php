@@ -26,9 +26,6 @@ class ReportsTableGateway extends TableGateway
     {
         $sortedArray = $this->sortArray($array, 'ip_address');
 
-        echo '<pre>' , print_r($sortedArray) , '</pre>';
-        die;
-
         foreach($sortedArray as $keyByIp => $valuesByIp)
         {
 
@@ -43,10 +40,6 @@ class ReportsTableGateway extends TableGateway
                 }
 
                 fclose($file);*/
-
-                var_dump($keyByDate);
-                var_dump($valuesByDate);
-                die;
 
             }
         }
