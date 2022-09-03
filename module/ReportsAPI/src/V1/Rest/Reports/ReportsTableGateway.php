@@ -9,13 +9,16 @@ class ReportsTableGateway extends TableGateway
 
     private $jsonLocation = './public/data/';
 
-    private function sortArray(array $array, string $sortByKey)
+    private function sortArray(array $array, string $sortByFirstKey)
     {
         $sortedArray = [];
 
         foreach($array as $value)
         {
-            $sortedArray[$value[$sortByKey]][] = $value;
+            $secondKey = $value['created_at']->format('Y-m-d');
+            //También podría ser un array multidimensional
+            //$sortedArray[$value[$sortByFirstKey]][$secondKey][] = $value;
+            $sortedArray[$value[$sortByFirstKey . '_' . $secondKey]][] = $value;
         }
 
         return $sortedArray;
@@ -25,11 +28,12 @@ class ReportsTableGateway extends TableGateway
     {
         $sortedArray = $this->sortArray($array, 'ip_address');
 
-        foreach($sortedArray as $keyByIp=> $valuesByIp)
+        foreach($sortedArray as $keyByIpAndDate => $valuesByIpAndDate)
         {
-            $file = fopen($this->jsonLocation . $keyByIp . '_' . date('Y-m-d') . '.json', 'w');
 
-            foreach($valuesByIp as $value)
+            $file = fopen($this->jsonLocation . $keyByIpAndDate . '.json', 'w');
+
+            foreach($valuesByIpAndDate as $value)
             {
                 fputs($file, json_encode($value));
             }
